@@ -1,0 +1,32 @@
+[project]
+name = "morsetrainer"
+version = "0.1.0"
+description = "Morse Code ICR Trainer"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "morsedecode>=1.0.1",
+  "numpy>=2.3.4",
+  "pyaudio>=0.2.14",
+  "pyfiglet>=1.0.4",
+  "textual>=6.5.0",
+]
+
+[dependency-groups]
+dev = ["morsetrainer", "textual-dev>=1.8.0"]
+
+[project.scripts]
+morse = "morsetrainer.__main__:main"
+icr = "morsetrainer.tui.app:icr"
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+morsetrainer = { workspace = true }
+
+[tool.basedpyright]
+reportUnusedCallResult = false
+reportAny = false
+reportUnknownMemberType = false
+reportUnannotatedClassAttribute = false

@@ -1,0 +1,89 @@
+
+SettingsModal {
+    align: center middle;
+}
+
+GamePanel {
+    height: 2fr;
+    min-height: 8;
+}
+
+HistoryPanel {
+    border: $accent;
+    height: 9fr;
+}
+
+StatusBar {
+    max-height: 1;
+}
+
+#settings-container {
+    width: 64;
+    height: 15;
+    background: $surface;
+    border: panel $secondary;
+    padding: 1 2;
+    margin: 1;
+}
+
+.setting-row {
+    height: auto;
+}
+
+.setting-label {
+    width: 1fr;
+    text-style: bold;
+}
+
+Input {
+    width: 20;
+    margin-left: 2;
+    border: hidden;
+    height: 1;
+}
+
+Switch {
+    margin-left: 2;
+}
+
+#tone-fade-input {
+    width: 20;
+    margin-left: 2;
+}
+
+.button-container {
+    margin-top: 1;
+    width: 58;
+    align: center middle;
+}
+
+.settings-button {
+  margin: 1;
+}
+
+#status_bar {
+    background: $panel;
+    align: right middle;
+}
+
+#status_bar .label {
+    color: $text-muted;
+    margin-left: 1;
+}
+
+#status_bar > .label-separator {
+    color: $accent-darken-3;
+    margin-left: 1;
+}
+
+Horizontal#footer-outer {
+    height: 1;
+    dock: bottom;
+}
+Horizonal#footer-inner {
+    width: 75%;
+}
+Label#right-label {
+    width: 25%;
+    text-align: right;
+}
