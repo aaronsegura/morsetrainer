@@ -2,18 +2,20 @@ from pathlib import Path
 import pickle
 import platformdirs
 
-from typing import TypeAlias
+from typing import TypeVar
 
 
-type T = TypeAlias
+T = TypeVar("T")
 
 
 class SaveFile[T]:
     _file: Path
+    _path: Path
 
-    def save(self, ctx: T) -> None:
+    def save(self, thing: T) -> None:
+        self._path.mkdir(exist_ok=True, parents=True)
         with open(self._file, "wb+") as fp:
-            fp.write(pickle.dumps(ctx))
+            fp.write(pickle.dumps(thing))
 
     def load(self) -> T:
         with open(self._file, "rb") as fp:
@@ -22,14 +24,10 @@ class SaveFile[T]:
 
 
 class MorseToneSaveFile(SaveFile):
-    def __init__(self):
-        config_path = platformdirs.user_config_path() / "morsetrainer"
-        config_path.mkdir(exist_ok=True, parents=True)
-        self._file = config_path / "config.dat"
+    _path = platformdirs.user_config_path() / "morsetrainer"
+    _file = _path / "config.dat"
 
 
-class HistoricalSaveFile(SaveFile):
-    def __init__(self):
-        config_path = platformdirs.user_state_path() / "morsetrainer"
-        config_path.mkdir(exist_ok=True, parents=True)
-        self._file = config_path / "history.dat"
+class IcrStateSaveFile(SaveFile):
+    _path = platformdirs.user_state_path() / "morsetrainer"
+    _file = _path / "icr_history.dat"

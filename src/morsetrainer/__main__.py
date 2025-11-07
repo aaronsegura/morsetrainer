@@ -1,7 +1,7 @@
 import argparse
 import pyaudio
 
-from morsetrainer import MorseToneContext, Phrase
+from morsetrainer.core import MorseToneContext, Phrase
 
 _FS = 48000
 

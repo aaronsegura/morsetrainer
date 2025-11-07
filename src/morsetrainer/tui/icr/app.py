@@ -25,12 +25,12 @@ class IcrTuiApp(App[int]):
     ]
     TITLE = "ICR Trainer"
     SUB_TITLE = "Just morsin' around"
-    MCT_TONE_CONTROL: MorseToneContext
+    ICR_TONE_CONTROL: MorseToneContext
 
     @override
     def compose(self) -> ComposeResult:
         f = MorseToneSaveFile()
-        self.MCT_TONE_CONTROL: MorseToneContext = f.load()
+        self.ICR_TONE_CONTROL: MorseToneContext = f.load()
 
         yield Header(icon="💫")
         yield GamePanel()
@@ -50,12 +50,12 @@ class IcrTuiApp(App[int]):
         def save_settings(new_ctx: MorseToneContext | None) -> None:
             if new_ctx:
                 self._update_status_bar(new_ctx)
-                self.MCT_TONE_CONTROL = new_ctx
+                self.ICR_TONE_CONTROL = new_ctx
                 f = MorseToneSaveFile()
                 f.save(new_ctx)
                 self.app.notify("Updated Settings!", timeout=1)
 
-        modal = SettingsModal(self.MCT_TONE_CONTROL)
+        modal = SettingsModal(self.ICR_TONE_CONTROL)
         self.push_screen(modal, save_settings)
 
     def action_choose_theme(self) -> None:

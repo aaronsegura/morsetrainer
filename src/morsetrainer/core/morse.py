@@ -12,6 +12,9 @@ import morsedecode
 
 _TONE_FADE_BASE = 0.001
 _SAMPLING_RATE = 48000
+_DITS_BETWEEN_LETTERS = 3
+_DITS_BETWEEN_WORDS = 7
+_DITS_PER_DAH = 3
 
 
 @dataclass
@@ -28,7 +31,6 @@ class Tone:
     tone_fade: int
     sampling_frequency: int = field(default=_SAMPLING_RATE)
 
-    @property
     def stream(self) -> bytes:
         return self.faded_tone(
             self.frequency, self.duration, self.tone_fade, self.sampling_frequency
@@ -89,7 +91,11 @@ class Phrase:
         for word in self._phrase.split(" "):
             _word = Word(word)
             phrase_stream.append(_word.stream(ctx))
-            phrase_stream.append(_silence(_dit_length(ctx.wpm) * 5))
+            phrase_stream.append(_silence(_dit_length(ctx.wpm) * _DITS_BETWEEN_WORDS))
+
+        # We don't need trailing silence
+        phrase_stream.pop()
+
         return b"".join(phrase_stream)
 
 
@@ -102,7 +108,11 @@ class Word:
         for letter in self._word:
             _letter = Letter(letter)
             word_stream.append(_letter.stream(ctx))
-            word_stream.append(_silence(_dit_length(ctx.wpm) * 3))
+            word_stream.append(_silence(_dit_length(ctx.wpm) * _DITS_BETWEEN_LETTERS))
+
+        # We don't need trailing silence
+        word_stream.pop()
+
         return b"".join(word_stream)
 
 
@@ -125,6 +135,9 @@ class Letter:
 
             letter_stream.append(_silence(_dit_length(ctx.wpm)))
 
+        # We don't need trailing silence
+        letter_stream.pop()
+
         return b"".join(letter_stream)
 
 
@@ -141,8 +154,10 @@ def _dit(
 def _dah(
     ctx: MorseToneContext,
 ) -> bytes:
-    return Tone.faded_tone(ctx.frequency, _dit_length(ctx.wpm) * 3, ctx.tone_fade)
+    return Tone.faded_tone(
+        ctx.frequency, _dit_length(ctx.wpm) * _DITS_PER_DAH, ctx.tone_fade
+    )
 
 
 def _silence(length: float, rate: int = _SAMPLING_RATE) -> bytes:
-    return Tone.faded_tone(0, length, 1, rate)
+    return b"\x00" * int(length * rate * 3)
